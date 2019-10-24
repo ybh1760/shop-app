@@ -84,8 +84,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     height: "15%"
   },
-  title: { fontSize: 16 },
-  price: { fontSize: 14, color: "#888" },
+  title: { fontSize: 16, fontFamily: "open-sans-bold" },
+  price: { fontSize: 14, fontFamily: "open-sans", color: "#888" },
   actions: {
     paddingHorizontal: 20,
     flexDirection: "row",

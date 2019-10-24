@@ -45,12 +45,18 @@ const styles = StyleSheet.create({
     marginVertical: 10
   },
   price: {
+    fontFamily: "open-sans",
     textAlign: "center",
     fontSize: 20,
     color: "#888",
     marginVertical: 20
   },
-  desc: { textAlign: "center", fontSize: 14, paddingHorizontal: 20 }
+  desc: {
+    fontFamily: "open-sans",
+    textAlign: "center",
+    fontSize: 14,
+    paddingHorizontal: 20
+  }
 });
 
 export default ProductDetailScreen;
