@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import Colors from "../../constants/Colors";
 
-const { width, height } = Dimensions.get("window");
+const { height } = Dimensions.get("window");
 
 const ProductItem = props => {
   const { image, title, price, onViewDetail, onToCart } = props;
