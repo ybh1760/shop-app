@@ -23,25 +23,33 @@ const ProductItem = props => {
   }
 
   return (
-    <TouchableCMP onPress={onViewDetail}>
-      <View style={styles.product}>
-        <View style={styles.imageContainer}>
-          <Image style={styles.image} source={{ uri: image }} />
-        </View>
-        <View style={styles.content}>
-          <Text style={styles.title}>{title}</Text>
-          <Text style={styles.price}>${price}</Text>
-        </View>
-        <View style={styles.actions}>
-          <Button
-            color={Colors.primary}
-            title="View Detail"
-            onPress={onViewDetail}
-          />
-          <Button color={Colors.primary} title="To Cart" onPress={onToCart} />
-        </View>
+    <View style={styles.product}>
+      <View style={styles.touchable}>
+        <TouchableCMP onPress={onViewDetail} useForeground>
+          <View>
+            <View style={styles.imageContainer}>
+              <Image style={styles.image} source={{ uri: image }} />
+            </View>
+            <View style={styles.content}>
+              <Text style={styles.title}>{title}</Text>
+              <Text style={styles.price}>${price}</Text>
+            </View>
+            <View style={styles.actions}>
+              <Button
+                color={Colors.primary}
+                title="View Detail"
+                onPress={onViewDetail}
+              />
+              <Button
+                color={Colors.primary}
+                title="To Cart"
+                onPress={onToCart}
+              />
+            </View>
+          </View>
+        </TouchableCMP>
       </View>
-    </TouchableCMP>
+    </View>
   );
 };
 
@@ -58,6 +66,10 @@ const styles = StyleSheet.create({
     height: Platform.OS === "android" ? height * 0.4 : height * 0.33,
     backgroundColor: "white",
     alignSelf: "center"
+  },
+  touchable: {
+    borderRadius: 10,
+    overflow: "hidden"
   },
   imageContainer: {
     borderTopRightRadius: 10,
