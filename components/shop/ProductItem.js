@@ -6,7 +6,9 @@ import {
   StyleSheet,
   Image,
   Dimensions,
-  Platform
+  Platform,
+  TouchableOpacity,
+  TouchableNativeFeedback
 } from "react-native";
 import Colors from "../../constants/Colors";
 
@@ -15,23 +17,25 @@ const { height } = Dimensions.get("window");
 const ProductItem = props => {
   const { image, title, price, onViewDetail, onToCart } = props;
   return (
-    <View style={styles.product}>
-      <View style={styles.imageContainer}>
-        <Image style={styles.image} source={{ uri: image }} />
+    <TouchableOpacity onPress={onViewDetail}>
+      <View style={styles.product}>
+        <View style={styles.imageContainer}>
+          <Image style={styles.image} source={{ uri: image }} />
+        </View>
+        <View style={styles.content}>
+          <Text style={styles.title}>{title}</Text>
+          <Text style={styles.price}>${price}</Text>
+        </View>
+        <View style={styles.actions}>
+          <Button
+            color={Colors.primary}
+            title="View Detail"
+            onPress={onViewDetail}
+          />
+          <Button color={Colors.primary} title="To Cart" onPress={onToCart} />
+        </View>
       </View>
-      <View style={styles.content}>
-        <Text style={styles.title}>{title}</Text>
-        <Text style={styles.price}>${price}</Text>
-      </View>
-      <View style={styles.actions}>
-        <Button
-          color={Colors.primary}
-          title="View Detail"
-          onPress={onViewDetail}
-        />
-        <Button color={Colors.primary} title="To Cart" onPress={onToCart} />
-      </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 
