@@ -16,8 +16,14 @@ const { height } = Dimensions.get("window");
 
 const ProductItem = props => {
   const { image, title, price, onViewDetail, onToCart } = props;
+  let TouchableCMP = TouchableOpacity;
+
+  if (Platform.OS == "android" && Platform.Version >= 21) {
+    TouchableCMP = TouchableNativeFeedback;
+  }
+
   return (
-    <TouchableOpacity onPress={onViewDetail}>
+    <TouchableCMP onPress={onViewDetail}>
       <View style={styles.product}>
         <View style={styles.imageContainer}>
           <Image style={styles.image} source={{ uri: image }} />
@@ -35,7 +41,7 @@ const ProductItem = props => {
           <Button color={Colors.primary} title="To Cart" onPress={onToCart} />
         </View>
       </View>
-    </TouchableOpacity>
+    </TouchableCMP>
   );
 };
 
