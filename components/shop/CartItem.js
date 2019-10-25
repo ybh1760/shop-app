@@ -18,7 +18,7 @@ const CartItem = props => {
         <Text style={styles.mainText}>{title}</Text>
       </View>
       <View style={styles.itemData}>
-        <Text style={styles.mainText}>${amount}</Text>
+        <Text style={styles.mainText}>${amount.toFixed(2)}</Text>
         <TouchableOpacity style={styles.button} onPress={onRemove}>
           <Ionicons
             name={Platform.OS === "android" ? "md-trash" : "ios-trash"}
@@ -42,7 +42,8 @@ const styles = StyleSheet.create({
     justifyContent: "space-between"
   },
   itemData: {
-    flexDirection: "row"
+    flexDirection: "row",
+    alignItems: "center"
   },
   quantity: {
     fontFamily: "open-sans",
@@ -53,7 +54,7 @@ const styles = StyleSheet.create({
     fontFamily: "open-sans-bold",
     fontSize: 16
   },
-  button: { marginLeft: 10 }
+  button: { marginLeft: 20 }
 });
 
 export default CartItem;

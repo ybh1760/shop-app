@@ -19,7 +19,7 @@ const ProductOverviewScreen = props => {
         <ProductItem
           image={itemData.item.imageUrl}
           title={itemData.item.title}
-          price={itemData.item.price}
+          price={itemData.item.price.toFixed(2)}
           onViewDetail={() => {
             props.navigation.navigate({
               routeName: "productDetail",
@@ -38,6 +38,17 @@ const ProductOverviewScreen = props => {
 ProductOverviewScreen.navigationOptions = navData => {
   return {
     headerTitle: "All Products",
+    headerLeft: (
+      <HeaderButtons HeaderButtonComponent={HeaderButton}>
+        <Item
+          title="menu"
+          iconName={Platform.OS === "android" ? "md-menu" : "ios-menu"}
+          onPress={() => {
+            navData.navigation.toggleDrawer();
+          }}
+        />
+      </HeaderButtons>
+    ),
     headerRight: (
       <HeaderButtons HeaderButtonComponent={HeaderButton}>
         <Item

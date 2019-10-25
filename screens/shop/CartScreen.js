@@ -1,9 +1,11 @@
 import React from "react";
 import { View, StyleSheet, FlatList, Button, Text } from "react-native";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
 import Colors from "../../constants/Colors";
 import CartItem from "../../components/shop/CartItem";
+import * as cartActions from "../../store/actions/cart";
+import * as ordersActions from "../../store/actions/orders";
 
 const CartScreen = props => {
   const totalAmount = useSelector(state => state.cart.totalAmount);
@@ -18,19 +20,25 @@ const CartScreen = props => {
         sum: state.cart.items[key].sum
       });
     }
-    return cartItemsList;
+    return cartItemsList.sort((a, b) => (a.productId > b.productId ? 1 : -1));
   });
+
+  const dispatch = useDispatch();
+
   return (
     <View style={styles.screen}>
       <View style={styles.summary}>
         <Text style={styles.summaryText}>
-          Total Amount : <Text style={styles.amount}>${totalAmount}</Text>
+          Total Amount :{" "}
+          <Text style={styles.amount}>${totalAmount.toFixed(2)}</Text>
         </Text>
         <Button
           title="Order Now"
           color={Colors.accent}
-          onPress={() => {}}
           disabled={cartItems.length === 0}
+          onPress={() => {
+            dispatch(ordersActions.addOrders(cartItems, totalAmount));
+          }}
         />
       </View>
       <FlatList
@@ -41,7 +49,9 @@ const CartScreen = props => {
             title={itemData.item.productTitle}
             quantity={itemData.item.quantity}
             amount={itemData.item.sum}
-            onRemove={() => {}}
+            onRemove={() => {
+              dispatch(cartActions.removeFromCart(itemData.item.productId));
+            }}
           />
         )}
       />
