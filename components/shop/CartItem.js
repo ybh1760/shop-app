@@ -18,7 +18,9 @@ const CartItem = props => {
         <Text style={styles.mainText}>{title}</Text>
       </View>
       <View style={styles.itemData}>
-        <Text style={styles.mainText}>${amount.toFixed(2)}</Text>
+        <Text style={styles.mainText}>
+          ${Math.floor(amount.toFixed(2) * 100) / 100}
+        </Text>
         {deletable && (
           <TouchableOpacity style={styles.button} onPress={onRemove}>
             <Ionicons
