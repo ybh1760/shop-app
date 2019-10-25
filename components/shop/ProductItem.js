@@ -10,6 +10,8 @@ import {
   TouchableNativeFeedback
 } from "react-native";
 
+import Card from "../UI/Card";
+
 const { height } = Dimensions.get("window");
 
 const ProductItem = props => {
@@ -21,7 +23,7 @@ const ProductItem = props => {
   }
 
   return (
-    <View style={styles.product}>
+    <Card style={styles.product}>
       <View style={styles.touchable}>
         <TouchableCMP onPress={onSelect} useForeground>
           <View>
@@ -36,23 +38,14 @@ const ProductItem = props => {
           </View>
         </TouchableCMP>
       </View>
-    </View>
+    </Card>
   );
 };
 
 const styles = StyleSheet.create({
   product: {
-    marginVertical: 10,
-    borderRadius: 10,
-    shadowColor: "black",
-    shadowOpacity: 0.26,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 8,
-    elevation: 7,
-    width: "90%",
-    height: Platform.OS === "android" ? height * 0.4 : height * 0.33,
-    backgroundColor: "white",
-    alignSelf: "center"
+    margin: 20,
+    height: Platform.OS === "android" ? height * 0.4 : height * 0.33
   },
   touchable: {
     borderRadius: 10,
