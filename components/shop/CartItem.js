@@ -9,7 +9,7 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 
 const CartItem = props => {
-  const { amount, title, quantity, onRemove } = props;
+  const { amount, title, quantity, onRemove, deletable } = props;
 
   return (
     <View style={styles.cartItem}>
@@ -19,13 +19,15 @@ const CartItem = props => {
       </View>
       <View style={styles.itemData}>
         <Text style={styles.mainText}>${amount.toFixed(2)}</Text>
-        <TouchableOpacity style={styles.button} onPress={onRemove}>
-          <Ionicons
-            name={Platform.OS === "android" ? "md-trash" : "ios-trash"}
-            size={23}
-            color={"red"}
-          />
-        </TouchableOpacity>
+        {deletable && (
+          <TouchableOpacity style={styles.button} onPress={onRemove}>
+            <Ionicons
+              name={Platform.OS === "android" ? "md-trash" : "ios-trash"}
+              size={23}
+              color={"red"}
+            />
+          </TouchableOpacity>
+        )}
       </View>
     </View>
   );
