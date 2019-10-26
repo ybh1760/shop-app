@@ -1,11 +1,12 @@
-import React, { useEffect, useCallback, useReducer } from "react";
+import React, { useState, useEffect, useCallback, useReducer } from "react";
 import {
   ScrollView,
   View,
   StyleSheet,
   Platform,
   Alert,
-  KeyboardAvoidingView
+  KeyboardAvoidingView,
+  ActivityIndicator
 } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
@@ -13,6 +14,7 @@ import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import * as productsActions from "../../store/actions/products";
 import HeaderButton from "../../components/UI/HeaderButton";
 import Input from "../../components/UI/Input";
+import Colors from "../../constants/Colors";
 
 const FORM_INPUT_UPDATE = "FORM_INPUT_UPDATE";
 
@@ -45,6 +47,8 @@ const formReducer = (state, action) => {
 };
 
 const EditProductScreen = props => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState();
   const prodId = props.navigation.getParam("id");
   const selectedProduct = useSelector(state =>
     state.products.userProducts.find(prod => prod.id === prodId)
@@ -80,28 +84,48 @@ const EditProductScreen = props => {
     [dispatchFormState]
   );
 
-  const sumbitHandler = useCallback(() => {
+  const sumbitHandler = useCallback(async () => {
     const { title, imageUrl, description, price } = formState.inputValues;
     if (!formState.formIsVaild) {
       Alert.alert("Not Valid", "check your input errors", [{ text: "OKAY" }]);
       return;
     }
-    if (selectedProduct) {
-      dispatch(
-        productsActions.updateProduct(prodId, title, imageUrl, description)
-      );
-    } else {
-      dispatch(
-        productsActions.createProduct(title, imageUrl, description, +price)
-      );
+    setError(null);
+    setIsLoading(true);
+    try {
+      if (selectedProduct) {
+        await dispatch(
+          productsActions.updateProduct(prodId, title, imageUrl, description)
+        );
+      } else {
+        await dispatch(
+          productsActions.createProduct(title, imageUrl, description, +price)
+        );
+      }
+      props.navigation.goBack();
+    } catch (err) {
+      setError(err.message);
     }
-    props.navigation.goBack();
-  }, [dispatch, prodId, formState]);
+    setIsLoading(false);
+  }, [dispatch, prodId, formState, setIsLoading, setError]);
+
+  useEffect(() => {
+    if (error) {
+      Alert.alert("ERROR", error, [{ text: "Okay" }]);
+    }
+  }, [error]);
 
   useEffect(() => {
     props.navigation.setParams({ submit: sumbitHandler });
   }, [sumbitHandler]);
 
+  if (isLoading) {
+    return (
+      <View style={styles.centered}>
+        <ActivityIndicator size="large" color={Colors.primary} />
+      </View>
+    );
+  }
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
@@ -189,6 +213,11 @@ EditProductScreen.navigationOptions = navData => {
 const styles = StyleSheet.create({
   form: {
     margin: 20
+  },
+  centered: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center"
   }
 });
 

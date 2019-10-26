@@ -35,11 +35,13 @@ export const fetchProducts = () => {
 
 export const deleteProduct = productId => {
   return async dispatch => {
-    await fetch(
+    const response = await fetch(
       `https://rn-shop-b1f3b.firebaseio.com/products/${productId}.json`,
       { method: "DELETE" }
     );
-
+    if (!response.ok) {
+      throw new Error("delete has an error");
+    }
     dispatch({ type: DELETE_PRODUCT, pid: productId });
   };
 };
@@ -61,6 +63,9 @@ export const createProduct = (title, imageUrl, description, price) => {
         })
       }
     );
+    if (!response.ok) {
+      throw new Error("create has an Error");
+    }
     const resData = await response.json();
 
     dispatch({
@@ -78,18 +83,23 @@ export const createProduct = (title, imageUrl, description, price) => {
 
 export const updateProduct = (id, title, imageUrl, description) => {
   return async dispatch => {
-    await fetch(`https://rn-shop-b1f3b.firebaseio.com/products/${id}.json`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        title,
-        imageUrl,
-        description
-      })
-    });
-
+    const response = await fetch(
+      `https://rn-shop-b1f3b.firebaseio.com/products/${id}.json`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          title,
+          imageUrl,
+          description
+        })
+      }
+    );
+    if (!response.ok) {
+      throw new Error("there is an new Error");
+    }
     dispatch({
       type: UPDATE_PRODUCT,
       pid: id,

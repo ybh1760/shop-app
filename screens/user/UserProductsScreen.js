@@ -1,5 +1,12 @@
-import React from "react";
-import { FlatList, Platform, Button, Alert } from "react-native";
+import React, { useState, useEffect } from "react";
+import {
+  View,
+  FlatList,
+  Platform,
+  Button,
+  Alert,
+  ActivityIndicator
+} from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 
@@ -9,6 +16,9 @@ import ProductItem from "../../components/shop/ProductItem";
 import Colors from "../../constants/Colors";
 
 const UserProductsScreen = props => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState();
+
   const userProduct = useSelector(state => state.products.userProducts);
   const dispatch = useDispatch();
 
@@ -22,12 +32,31 @@ const UserProductsScreen = props => {
       {
         text: "Yes",
         style: "destructive",
-        onPress: () => {
-          dispatch(productsActions.deleteProduct(id));
+        onPress: async () => {
+          setIsLoading(true);
+          try {
+            await dispatch(productsActions.deleteProduct(id));
+          } catch (err) {
+            setError(err.message);
+          }
+          setIsLoading(false);
         }
       }
     ]);
   };
+
+  useEffect(() => {
+    if (error) {
+      Alert.alert("ERROR", error, [{ text: "Okay" }]);
+    }
+  }, [error]);
+  if (isLoading) {
+    return (
+      <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+        <ActivityIndicator size="large" color={Colors.primary} />
+      </View>
+    );
+  }
 
   return (
     <FlatList
