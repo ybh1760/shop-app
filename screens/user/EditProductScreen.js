@@ -46,6 +46,7 @@ const EditProductScreen = props => {
   useEffect(() => {
     props.navigation.setParams({ submit: sumbitHandler });
   }, [sumbitHandler]);
+
   return (
     <View style={{ flex: 1 }}>
       <ScrollView style={styles.form}>
@@ -55,6 +56,15 @@ const EditProductScreen = props => {
             style={styles.input}
             value={title}
             onChangeText={text => setTitle(text)}
+            autoCapitalize="sentences"
+            autoCorrect
+            returnKeyType="next"
+            onEndEditing={() => {
+              console.log("End Editing");
+            }}
+            onSubmitEditing={() => {
+              console.log("Submit Editing");
+            }}
           />
         </View>
         <View style={styles.formContent}>
@@ -72,6 +82,7 @@ const EditProductScreen = props => {
               style={styles.input}
               value={price}
               onChangeText={text => setPrice(text)}
+              keyboardType="decimal-pad"
             />
           </View>
         )}
