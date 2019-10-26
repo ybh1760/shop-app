@@ -2,11 +2,10 @@ import React, { useEffect, useCallback, useReducer } from "react";
 import {
   ScrollView,
   View,
-  Text,
   StyleSheet,
-  TextInput,
   Platform,
-  Alert
+  Alert,
+  KeyboardAvoidingView
 } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
@@ -20,12 +19,20 @@ const FORM_INPUT_UPDATE = "FORM_INPUT_UPDATE";
 const formReducer = (state, action) => {
   switch (action.type) {
     case FORM_INPUT_UPDATE:
-      const updatedInputValues = { ...state.inputValues };
-      updatedInputValues[action.input] = action.value;
-      const updatedInputValidities = { ...state.inputVaildities };
-      updatedInputValidities[action.input] = action.isValid;
+      const updatedInputValues = {
+        ...state.inputValues,
+        [action.input]: action.value
+      };
+
+      const updatedInputValidities = {
+        ...state.inputVaildities,
+        [action.input]: action.isValid
+      };
+
       let updatedFormIsValid = true;
+
       for (const key in updatedInputValidities) {
+        if (key === "[object Object]") continue;
         updatedFormIsValid = updatedFormIsValid && updatedInputValidities[key];
       }
       return {
@@ -96,7 +103,11 @@ const EditProductScreen = props => {
   }, [sumbitHandler]);
 
   return (
-    <View style={{ flex: 1 }}>
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior="padding"
+      keyboardVerticalOffset={100}
+    >
       <ScrollView style={styles.form}>
         <Input
           id="title"
@@ -150,7 +161,7 @@ const EditProductScreen = props => {
           minLength={5}
         />
       </ScrollView>
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 

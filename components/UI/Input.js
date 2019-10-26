@@ -1,13 +1,5 @@
-import React, { useEffect, useCallback, useReducer } from "react";
-import {
-  ScrollView,
-  View,
-  Text,
-  StyleSheet,
-  TextInput,
-  Platform,
-  Alert
-} from "react-native";
+import React, { useEffect, useReducer } from "react";
+import { View, Text, StyleSheet, TextInput } from "react-native";
 
 const INPUT_UPDATE = "INPUT_UPDATE";
 const INPUT_BLUR = "INPUT_BLUR";
@@ -81,7 +73,11 @@ const Input = props => {
         onChangeText={textChangeHandler}
         onBlur={blurHandler}
       />
-      {!inputState.isValid && <Text>{props.errorTexts}</Text>}
+      {!inputState.isValid && inputState.touched && (
+        <View style={styles.error}>
+          <Text style={styles.errorText}>{props.errorTexts}</Text>
+        </View>
+      )}
     </View>
   );
 };
@@ -100,6 +96,13 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: "#ccc",
     padding: 3
+  },
+  error: {
+    margin: 5
+  },
+  errorText: {
+    fontSize: 13,
+    color: "red"
   }
 });
 
