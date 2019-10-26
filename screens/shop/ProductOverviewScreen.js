@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   View,
   Text,
@@ -19,17 +19,23 @@ import Colors from "../../constants/Colors";
 
 const ProductOverviewScreen = props => {
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState();
   const products = useSelector(state => state.products.availableProducts);
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    const loadProducts = async () => {
-      setIsLoading(true);
+  const loadProducts = useCallback(async () => {
+    setIsLoading(true);
+    try {
       await dispatch(productsActions.fetchProducts());
-      setIsLoading(false);
-    };
+    } catch (err) {
+      setError(err.message);
+    }
+    setIsLoading(false);
+  }, [dispatch, setIsLoading, setError]);
+
+  useEffect(() => {
     loadProducts();
-  }, [dispatch, setIsLoading]);
+  }, [dispatch, loadProducts]);
 
   const viewDetailHandler = (id, title) => {
     props.navigation.navigate({
@@ -45,7 +51,25 @@ const ProductOverviewScreen = props => {
       </View>
     );
   }
-
+  if (products.length === 0) {
+    return (
+      <View style={styles.centered}>
+        <Text>No products, Maybe add products!</Text>
+      </View>
+    );
+  }
+  if (error) {
+    return (
+      <View style={styles.centered}>
+        <Text>Error Occurs</Text>
+        <Button
+          title="try again"
+          onPress={loadProducts}
+          color={Colors.primary}
+        />
+      </View>
+    );
+  }
   return (
     <FlatList
       data={products}
