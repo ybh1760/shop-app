@@ -12,7 +12,6 @@ export const fetchProducts = () => {
         "https://rn-shop-b1f3b.firebaseio.com/products.json"
       );
       const resData = await response.json();
-      console.log(resData);
 
       const loadedProducts = [];
       for (const key in resData) {
