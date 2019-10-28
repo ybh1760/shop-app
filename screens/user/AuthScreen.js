@@ -1,10 +1,12 @@
-import React, {useState,useReducer, useCallback} from 'react';
+import React, {useState,useReducer, useCallback, useEffect} from 'react';
 import {
   ScrollView,
   View,
   KeyboardAvoidingView,
   StyleSheet,
-  Button
+  Button,
+  ActivityIndicator,
+  Alert
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import {useDispatch} from "react-redux";
@@ -13,6 +15,7 @@ import Input from '../../components/UI/Input';
 import Card from '../../components/UI/Card';
 import Colors from '../../constants/Colors';
 import * as authActions from "../../store/actions/auth";
+
 
 const FORM_INPUT_UPDATE = "FORM_INPUT_UPDATE";
 
@@ -37,6 +40,8 @@ const formReducer = (state, action) =>{
 
 const AuthScreen = props => {
   const [isSigning, setIsSigning] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState();
   const dispatch = useDispatch();
   const [formState , dispatchFormState] = useReducer(formReducer, {
     inputValues :{
@@ -54,16 +59,27 @@ const AuthScreen = props => {
     dispatchFormState({type:FORM_INPUT_UPDATE ,input : inputIdentifier, value: value, isValid:isValid})
   },[dispatchFormState])
 
-  const authHandler = ()=>{
+  const authHandler = async()=>{
     let action;
     if(isSigning){
       action = authActions.login(formState.inputValues.email,formState.inputValues.password)
     }else{
      action= authActions.signup(formState.inputValues.email,formState.inputValues.password)
     }
-    dispatch(action)
+    setIsLoading(true);
+    setError(null);
+    try{
+      await dispatch(action);
+    }catch(err){
+      setError(err.message);
+    }
+    setIsLoading(false);
   }
-
+  useEffect(()=>{
+    if(error){
+      Alert.alert("ERROR", error, [{text:"ok"}])
+    }
+  },[error])
 
   return (
     <KeyboardAvoidingView
@@ -98,7 +114,8 @@ const AuthScreen = props => {
               initialValue=""
             />
             <View style={styles.buttonContainer}>
-              <Button title={isSigning ? "Log In":"Sign Up"} color={Colors.primary} onPress={authHandler} />
+              {isLoading ? <ActivityIndicator size="small" color={Colors.primary}/> : <Button title={isSigning ? "Log In":"Sign Up"} color={Colors.primary} onPress={authHandler} />}
+              
             </View>
             <View style={styles.buttonContainer}>
               <Button
