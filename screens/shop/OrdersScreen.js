@@ -46,6 +46,9 @@ const OrdersScreen = props => {
             <ActivityIndicator size="large" color={Colors.primary}/>
       </Center>);
     }
+    if(orders.length===0){
+      return <Center><Text>No Orders !!!!!! </Text></Center>
+    }
   return (
     <FlatList
       data={orders}
