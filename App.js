@@ -6,7 +6,7 @@ import * as Font from "expo-font";
 import ReduxThunk from "redux-thunk";
 // import { composeWithDevTools } from "redux-devtools-extension";
 
-import ShopNavigator from "./navigation/ShopNavigator";
+import NavigatorContainer from "./navigation/NavigatorContainer";
 import productReducer from "./store/reducers/products";
 import cartReducer from "./store/reducers/cart";
 import ordersReducer from "./store/reducers/orders";
@@ -44,7 +44,7 @@ export default function App() {
 
   return (
     <Provider store={store}>
-      <ShopNavigator />
+      <NavigatorContainer />
     </Provider>
   );
 }
